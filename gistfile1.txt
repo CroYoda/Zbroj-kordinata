@@ -1,0 +1,74 @@
+<?php
+
+$json = '{"1":{"1":4,"2":7,"3":6,"4":2,"5":9,"6":8,"7":1},
+        "2":{"1":6,"2":7,"3":9,"4":6,"5":8,"6":7,"7":1},
+        "3":{"1":6,"2":8,"3":2,"4":2,"5":7,"6":2,"7":6},
+        "4":{"1":8,"2":4,"3":8,"4":7,"5":1,"6":8,"7":7},
+        "5":{"1":4,"2":7,"3":2,"4":4,"5":4,"6":4,"7":3},
+        "6":{"1":7,"2":7,"3":5,"4":1,"5":2,"6":2,"7":2},
+        "7":{"1":1,"2":5,"3":7,"4":5,"5":8,"6":3,"7":3}}';
+$convert_to_array = json_decode($json);
+
+$red = 1;
+foreach ($convert_to_array as $element){
+    foreach ($element as $one_number){
+        $matrica[$red][] =  $one_number;
+    }
+    
+    $red++;
+}
+$orgina_array = $matrica;
+asort($matrica[1]);
+
+$first_row_array_keys = array_keys($matrica[1]);
+
+
+foreach($matrica as $red_matrice => $vrijednosti){
+    if($red_matrice === 1){
+        $complete_array[1] = $vrijednosti;
+        continue;
+    }
+    
+    foreach ($vrijednosti as $red_key=>$red_value){
+         $complete_array[$red_matrice][$first_row_array_keys[$red_key]] = $vrijednosti[$first_row_array_keys[$red_key]];
+    }
+    
+}
+
+$biggest_number_in_array = get_max_num($complete_array);
+
+$total = 0;
+
+foreach($complete_array as $one_row_key=>$one_row_values){
+    
+    if($one_row_key === 1){
+        continue;
+    }
+    
+    $i=1;
+    foreach($one_row_values as $number_key=>$number_value){
+        if($number_value === $biggest_number_in_array){
+            //$locations[] = array($one_row_key,$i);
+            $total = $total + ($one_row_key+$i);
+        }
+        $i++;
+    }
+    
+}
+
+
+var_dump('Najveci broj u arrayu: '.$biggest_number_in_array);
+var_dump("Zbroj koordinata: ".$total);
+
+
+function get_max_num($my_array){
+    $max = 0;
+    foreach($my_array as $single_row){
+        foreach ($single_row as $one_number){
+            if($one_number >= $max){
+                $max = $one_number;
+            }
+        }
+    }
+    return $max;
+}
